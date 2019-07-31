@@ -39,7 +39,7 @@ function scrapingTrigger() {
           }
         }
 
-        // 新規の場合シートに書き込み&メール送信
+        // 新規の場合シートに書き込み&Tweet
         if (is_ticket_link_new) {
           sheet.getRange(lastRow + 1, 1).setValue(new Date());
           sheet.getRange(lastRow + 1, 2).setValue(ticket_link);
