@@ -6,7 +6,11 @@ function scrapingTrigger() {
   var lastColumn = sheet.getLastColumn();
 
   // -----Get Spreadsheet Data-----
-  var sheet_data = sheet.getRange(2, 1, lastRow - 1, lastColumn).getValues();
+  var sheet_data = sheet.getRange(3, 1, lastRow - 2, lastColumn).getValues();
+
+  var event_name_tiketore = sheet.getRange(1, 1).getValue();
+  var event_name_tweet = sheet.getRange(1, 2).getValue();
+  var hash_tags = sheet.getRange(1, 3).getValue();
 
   // -----Scraping-----
   try {
@@ -21,7 +25,7 @@ function scrapingTrigger() {
 
     for (var i_links = 0; i_links < links.length; i_links++) {
       // サマソニチケット判別
-      if (links[i_links].indexOf('ＳＰＡＣＥ　ＳＨＯＷＥＲ　ＴＶ　３０ＴＨ　ＡＮＮＩＶＥＲＳＡＲＹ') !== -1) {
+      if (links[i_links].indexOf(event_name_tiketore) !== -1) {
         // チケットリンク取得
         var ticket_link = 'https://tiketore.com';
         ticket_link += Parser.data(links[i_links])
@@ -33,7 +37,6 @@ function scrapingTrigger() {
         // チケットリンクが過去の記録と一致するかチェック
         var is_ticket_link_new = true;
         for (var i_sheet = 0; i_sheet < sheet_data.length; i_sheet++) {
-          var is_ticket_link_new = true;
           var tiket_link_onSheet = sheet_data[i_sheet][1];
           Logger.log('link_onSheet: ' + tiket_link_onSheet);
           if (ticket_link === tiket_link_onSheet) {
@@ -45,10 +48,15 @@ function scrapingTrigger() {
 
         // 新規の場合シートに書き込み&Tweet
         if (is_ticket_link_new) {
+          // シート書き込み
           lastRow = sheet.getLastRow();
           sheet.getRange(lastRow + 1, 1).setValue(new Date());
           sheet.getRange(lastRow + 1, 2).setValue(ticket_link);
-          Twitter.tweet('【SWEET LOVE SHOWER 2019 チケット公式リセール新着情報】\n' + createBitlyUrl(ticket_link) + '\n#ラブシャ #sweetloveshower #SLS #チケット');
+
+          // Tweet
+          var status_txt = '【' + event_name_tweet + '】\nチケット公式リセール新着情報\n' + createBitlyUrl(ticket_link) + '\n' + hash_tags + ' #チケット';
+          Twitter.tweet(status_txt);
+          Logger.log(status_txt);
         }
       }
     }
