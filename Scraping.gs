@@ -35,6 +35,8 @@ function scrapingTrigger() {
         Logger.log('tiketore_link: ' + ticket_link);
 
         // チケットリンクが過去の記録と一致するかチェック
+        lastRow = sheet.getLastRow();
+        sheet_data = sheet.getRange(3, 1, lastRow - 2, lastColumn).getValues();
         var is_ticket_link_new = true;
         for (var i_sheet = 0; i_sheet < sheet_data.length; i_sheet++) {
           var tiket_link_onSheet = sheet_data[i_sheet][1];
@@ -49,7 +51,6 @@ function scrapingTrigger() {
         // 新規の場合シートに書き込み&Tweet
         if (is_ticket_link_new) {
           // シート書き込み
-          lastRow = sheet.getLastRow();
           sheet.getRange(lastRow + 1, 1).setValue(new Date());
           sheet.getRange(lastRow + 1, 2).setValue(ticket_link);
 
