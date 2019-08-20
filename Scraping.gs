@@ -6,7 +6,7 @@ function scrapingTrigger() {
   var lastColumn = sheet.getLastColumn();
 
   // -----Get Spreadsheet Data-----
-  var sheet_data = sheet.getRange(3, 1, lastRow - 2, lastColumn).getValues();
+  var sheet_data = sheet.getRange(3, 1, lastRow, lastColumn).getValues();
 
   var event_name_tiketore = sheet.getRange(1, 1).getValue();
   var event_name_tweet = sheet.getRange(1, 2).getValue();
