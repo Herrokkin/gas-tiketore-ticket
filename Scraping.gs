@@ -1,7 +1,9 @@
 function scrapingTrigger() {
+  var debug_mode = true; // true => Run scraping but not post to Twitter
+  
   // -----Spreadsheet meta-----
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName("SweetLoveShower2019");
+  var sheet = ss.getSheets()[0];
   var lastRow = sheet.getLastRow();
   var lastColumn = sheet.getLastColumn();
 
@@ -40,7 +42,7 @@ function scrapingTrigger() {
         var is_ticket_link_new = true;
         for (var i_sheet = 0; i_sheet < sheet_data.length; i_sheet++) {
           var tiket_link_onSheet = sheet_data[i_sheet][1];
-          Logger.log('link_onSheet: ' + tiket_link_onSheet);
+          // Logger.log('link_onSheet: ' + tiket_link_onSheet);
           if (ticket_link === tiket_link_onSheet) {
             is_ticket_link_new = false;
             break;
@@ -56,8 +58,7 @@ function scrapingTrigger() {
 
           // Tweet
           var status_txt = '【' + event_name_tweet + '】\nチケット公式リセール新着情報\n' + createBitlyUrl(ticket_link) + '\n' + hash_tags + ' #チケット';
-          Twitter.tweet(status_txt);
-          Logger.log(status_txt);
+          debug_mode ? Logger.log('[DEBUG] Tweet Done:\n' + status_txt) : Twitter.tweet(status_txt);
         }
       }
     }
