@@ -1,5 +1,5 @@
 function scrapingTrigger() {
-  var debug_mode = true; // true => Run scraping but not post to Twitter
+  var debug_mode = false; // true => Run scraping but not post to Twitter
   
   // -----Spreadsheet meta-----
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -13,11 +13,11 @@ function scrapingTrigger() {
   var event_name_tiketore = sheet.getRange(1, 1).getValue();
   var event_name_tweet = sheet.getRange(1, 2).getValue();
   var hash_tags = sheet.getRange(1, 3).getValue();
+  var event_url = sheet.getRange(1, 4).getValue();
 
   // -----Scraping-----
   try {
-    var url = 'https://tiketore.com/events/artist/10045'
-    var html = UrlFetchApp.fetch(url).getContentText();
+    var html = UrlFetchApp.fetch(event_url).getContentText();
 
     // Parser: from().to()はfromとtoに挟まれた部分を抜き出します。build()で文字列、iterate()で文字列の配列が得られます。
     var links = Parser.data(html)
@@ -57,7 +57,7 @@ function scrapingTrigger() {
           sheet.getRange(lastRow + 1, 2).setValue(ticket_link);
 
           // Tweet
-          var status_txt = '【' + event_name_tweet + '】\nチケット公式リセール新着情報\n' + createBitlyUrl(ticket_link) + '\n' + hash_tags + ' #チケット';
+          var status_txt = '【' + event_name_tweet + '】\nリセールチケット新着情報\n' + createBitlyUrl(ticket_link) + '\n' + hash_tags + ' #チケット';
           debug_mode ? Logger.log('[DEBUG] Tweet Done:\n' + status_txt) : Twitter.tweet(status_txt);
         }
       }
