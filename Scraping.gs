@@ -26,7 +26,7 @@ function scrapingTrigger() {
       .iterate();
 
     for (var i_links = 0; i_links < links.length; i_links++) {
-      // サマソニチケット判別
+      // イベント名からチケット判別
       if (links[i_links].indexOf(event_name_tiketore) !== -1) {
         // チケットリンク取得
         var ticket_link = 'https://tiketore.com';
