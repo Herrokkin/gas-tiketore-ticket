@@ -1,6 +1,6 @@
 function scrapingTrigger() {
   var debug_mode = false; // true => Run scraping but not post to Twitter
-  
+
   // -----Spreadsheet meta-----
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheets()[0];
@@ -57,7 +57,8 @@ function scrapingTrigger() {
           sheet.getRange(lastRow + 1, 2).setValue(ticket_link);
 
           // Tweet
-          var status_txt = '【' + event_name_tweet + '】\nリセールチケット新着情報\n' + createBitlyUrl(ticket_link) + '\n' + hash_tags + ' #チケット';
+          var status_txt = '🎫リセールチケット新着情報\n' + event_name_tweet + '\n' + createBitlyUrl(ticket_link) + '\n' + hash_tags;
+          
           debug_mode ? Logger.log('[DEBUG] Tweet Done:\n' + status_txt) : Twitter.tweet(status_txt);
         }
       }
